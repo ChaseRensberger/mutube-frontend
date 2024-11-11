@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { BackgroundBeamsWithCollision } from '@/components/background-beams-with-collision'
 import { Input } from "@/components/ui/input"
 import { MagnifyingGlass } from "@phosphor-icons/react"
@@ -20,9 +20,9 @@ export default function Hero() {
 						</a>
 					</div>
 					<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-						<a href="#" className="text-sm/6 font-semibold text-gray-900">
-							Log in <span aria-hidden="true">&rarr;</span>
-						</a>
+						<Link to="/signin" className="text-sm/6 font-semibold text-gray-900">
+							Sign in <span aria-hidden="true">&rarr;</span>
+						</Link>
 					</div>
 				</nav>
 			</header>

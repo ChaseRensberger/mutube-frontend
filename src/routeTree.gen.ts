@@ -16,10 +16,23 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const AuthenticatedLayoutLazyImport = createFileRoute(
+  '/_authenticated-layout',
+)()
 const IndexLazyImport = createFileRoute('/')()
 const SigninIndexLazyImport = createFileRoute('/signin/')()
+const AuthenticatedLayoutBrowseIndexLazyImport = createFileRoute(
+  '/_authenticated-layout/browse/',
+)()
 
 // Create/Update Routes
+
+const AuthenticatedLayoutLazyRoute = AuthenticatedLayoutLazyImport.update({
+  id: '/_authenticated-layout',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/_authenticated-layout.lazy').then((d) => d.Route),
+)
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -33,6 +46,17 @@ const SigninIndexLazyRoute = SigninIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/signin/index.lazy').then((d) => d.Route))
 
+const AuthenticatedLayoutBrowseIndexLazyRoute =
+  AuthenticatedLayoutBrowseIndexLazyImport.update({
+    id: '/browse/',
+    path: '/browse/',
+    getParentRoute: () => AuthenticatedLayoutLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated-layout/browse/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -44,6 +68,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated-layout': {
+      id: '/_authenticated-layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedLayoutLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/signin/': {
       id: '/signin/'
       path: '/signin'
@@ -51,43 +82,78 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated-layout/browse/': {
+      id: '/_authenticated-layout/browse/'
+      path: '/browse'
+      fullPath: '/browse'
+      preLoaderRoute: typeof AuthenticatedLayoutBrowseIndexLazyImport
+      parentRoute: typeof AuthenticatedLayoutLazyImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AuthenticatedLayoutLazyRouteChildren {
+  AuthenticatedLayoutBrowseIndexLazyRoute: typeof AuthenticatedLayoutBrowseIndexLazyRoute
+}
+
+const AuthenticatedLayoutLazyRouteChildren: AuthenticatedLayoutLazyRouteChildren =
+  {
+    AuthenticatedLayoutBrowseIndexLazyRoute:
+      AuthenticatedLayoutBrowseIndexLazyRoute,
+  }
+
+const AuthenticatedLayoutLazyRouteWithChildren =
+  AuthenticatedLayoutLazyRoute._addFileChildren(
+    AuthenticatedLayoutLazyRouteChildren,
+  )
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '': typeof AuthenticatedLayoutLazyRouteWithChildren
   '/signin': typeof SigninIndexLazyRoute
+  '/browse': typeof AuthenticatedLayoutBrowseIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '': typeof AuthenticatedLayoutLazyRouteWithChildren
   '/signin': typeof SigninIndexLazyRoute
+  '/browse': typeof AuthenticatedLayoutBrowseIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/_authenticated-layout': typeof AuthenticatedLayoutLazyRouteWithChildren
   '/signin/': typeof SigninIndexLazyRoute
+  '/_authenticated-layout/browse/': typeof AuthenticatedLayoutBrowseIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/signin'
+  fullPaths: '/' | '' | '/signin' | '/browse'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/signin'
-  id: '__root__' | '/' | '/signin/'
+  to: '/' | '' | '/signin' | '/browse'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated-layout'
+    | '/signin/'
+    | '/_authenticated-layout/browse/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  AuthenticatedLayoutLazyRoute: typeof AuthenticatedLayoutLazyRouteWithChildren
   SigninIndexLazyRoute: typeof SigninIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  AuthenticatedLayoutLazyRoute: AuthenticatedLayoutLazyRouteWithChildren,
   SigninIndexLazyRoute: SigninIndexLazyRoute,
 }
 
@@ -102,14 +168,25 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_authenticated-layout",
         "/signin/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
+    "/_authenticated-layout": {
+      "filePath": "_authenticated-layout.lazy.tsx",
+      "children": [
+        "/_authenticated-layout/browse/"
+      ]
+    },
     "/signin/": {
       "filePath": "signin/index.lazy.tsx"
+    },
+    "/_authenticated-layout/browse/": {
+      "filePath": "_authenticated-layout/browse/index.lazy.tsx",
+      "parent": "/_authenticated-layout"
     }
   }
 }
