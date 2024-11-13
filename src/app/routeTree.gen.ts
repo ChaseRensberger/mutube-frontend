@@ -24,6 +24,9 @@ const SigninIndexLazyImport = createFileRoute('/signin/')()
 const AuthenticatedLayoutSettingsIndexLazyImport = createFileRoute(
   '/_authenticated-layout/settings/',
 )()
+const AuthenticatedLayoutComposerIndexLazyImport = createFileRoute(
+  '/_authenticated-layout/composer/',
+)()
 const AuthenticatedLayoutBrowseIndexLazyImport = createFileRoute(
   '/_authenticated-layout/browse/',
 )()
@@ -56,6 +59,17 @@ const AuthenticatedLayoutSettingsIndexLazyRoute =
     getParentRoute: () => AuthenticatedLayoutLazyRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated-layout/settings/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const AuthenticatedLayoutComposerIndexLazyRoute =
+  AuthenticatedLayoutComposerIndexLazyImport.update({
+    id: '/composer/',
+    path: '/composer/',
+    getParentRoute: () => AuthenticatedLayoutLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated-layout/composer/index.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -103,6 +117,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLayoutBrowseIndexLazyImport
       parentRoute: typeof AuthenticatedLayoutLazyImport
     }
+    '/_authenticated-layout/composer/': {
+      id: '/_authenticated-layout/composer/'
+      path: '/composer'
+      fullPath: '/composer'
+      preLoaderRoute: typeof AuthenticatedLayoutComposerIndexLazyImport
+      parentRoute: typeof AuthenticatedLayoutLazyImport
+    }
     '/_authenticated-layout/settings/': {
       id: '/_authenticated-layout/settings/'
       path: '/settings'
@@ -117,6 +138,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedLayoutLazyRouteChildren {
   AuthenticatedLayoutBrowseIndexLazyRoute: typeof AuthenticatedLayoutBrowseIndexLazyRoute
+  AuthenticatedLayoutComposerIndexLazyRoute: typeof AuthenticatedLayoutComposerIndexLazyRoute
   AuthenticatedLayoutSettingsIndexLazyRoute: typeof AuthenticatedLayoutSettingsIndexLazyRoute
 }
 
@@ -124,6 +146,8 @@ const AuthenticatedLayoutLazyRouteChildren: AuthenticatedLayoutLazyRouteChildren
   {
     AuthenticatedLayoutBrowseIndexLazyRoute:
       AuthenticatedLayoutBrowseIndexLazyRoute,
+    AuthenticatedLayoutComposerIndexLazyRoute:
+      AuthenticatedLayoutComposerIndexLazyRoute,
     AuthenticatedLayoutSettingsIndexLazyRoute:
       AuthenticatedLayoutSettingsIndexLazyRoute,
   }
@@ -138,6 +162,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthenticatedLayoutLazyRouteWithChildren
   '/signin': typeof SigninIndexLazyRoute
   '/browse': typeof AuthenticatedLayoutBrowseIndexLazyRoute
+  '/composer': typeof AuthenticatedLayoutComposerIndexLazyRoute
   '/settings': typeof AuthenticatedLayoutSettingsIndexLazyRoute
 }
 
@@ -146,6 +171,7 @@ export interface FileRoutesByTo {
   '': typeof AuthenticatedLayoutLazyRouteWithChildren
   '/signin': typeof SigninIndexLazyRoute
   '/browse': typeof AuthenticatedLayoutBrowseIndexLazyRoute
+  '/composer': typeof AuthenticatedLayoutComposerIndexLazyRoute
   '/settings': typeof AuthenticatedLayoutSettingsIndexLazyRoute
 }
 
@@ -155,20 +181,22 @@ export interface FileRoutesById {
   '/_authenticated-layout': typeof AuthenticatedLayoutLazyRouteWithChildren
   '/signin/': typeof SigninIndexLazyRoute
   '/_authenticated-layout/browse/': typeof AuthenticatedLayoutBrowseIndexLazyRoute
+  '/_authenticated-layout/composer/': typeof AuthenticatedLayoutComposerIndexLazyRoute
   '/_authenticated-layout/settings/': typeof AuthenticatedLayoutSettingsIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/signin' | '/browse' | '/settings'
+  fullPaths: '/' | '' | '/signin' | '/browse' | '/composer' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/signin' | '/browse' | '/settings'
+  to: '/' | '' | '/signin' | '/browse' | '/composer' | '/settings'
   id:
     | '__root__'
     | '/'
     | '/_authenticated-layout'
     | '/signin/'
     | '/_authenticated-layout/browse/'
+    | '/_authenticated-layout/composer/'
     | '/_authenticated-layout/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -207,6 +235,7 @@ export const routeTree = rootRoute
       "filePath": "_authenticated-layout.lazy.tsx",
       "children": [
         "/_authenticated-layout/browse/",
+        "/_authenticated-layout/composer/",
         "/_authenticated-layout/settings/"
       ]
     },
@@ -215,6 +244,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated-layout/browse/": {
       "filePath": "_authenticated-layout/browse/index.lazy.tsx",
+      "parent": "/_authenticated-layout"
+    },
+    "/_authenticated-layout/composer/": {
+      "filePath": "_authenticated-layout/composer/index.lazy.tsx",
       "parent": "/_authenticated-layout"
     },
     "/_authenticated-layout/settings/": {
