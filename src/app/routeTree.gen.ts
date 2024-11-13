@@ -21,6 +21,9 @@ const AuthenticatedLayoutLazyImport = createFileRoute(
 )()
 const IndexLazyImport = createFileRoute('/')()
 const SigninIndexLazyImport = createFileRoute('/signin/')()
+const AuthenticatedLayoutSettingsIndexLazyImport = createFileRoute(
+  '/_authenticated-layout/settings/',
+)()
 const AuthenticatedLayoutBrowseIndexLazyImport = createFileRoute(
   '/_authenticated-layout/browse/',
 )()
@@ -45,6 +48,17 @@ const SigninIndexLazyRoute = SigninIndexLazyImport.update({
   path: '/signin/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/signin/index.lazy').then((d) => d.Route))
+
+const AuthenticatedLayoutSettingsIndexLazyRoute =
+  AuthenticatedLayoutSettingsIndexLazyImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => AuthenticatedLayoutLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated-layout/settings/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthenticatedLayoutBrowseIndexLazyRoute =
   AuthenticatedLayoutBrowseIndexLazyImport.update({
@@ -89,6 +103,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLayoutBrowseIndexLazyImport
       parentRoute: typeof AuthenticatedLayoutLazyImport
     }
+    '/_authenticated-layout/settings/': {
+      id: '/_authenticated-layout/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedLayoutSettingsIndexLazyImport
+      parentRoute: typeof AuthenticatedLayoutLazyImport
+    }
   }
 }
 
@@ -96,12 +117,15 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedLayoutLazyRouteChildren {
   AuthenticatedLayoutBrowseIndexLazyRoute: typeof AuthenticatedLayoutBrowseIndexLazyRoute
+  AuthenticatedLayoutSettingsIndexLazyRoute: typeof AuthenticatedLayoutSettingsIndexLazyRoute
 }
 
 const AuthenticatedLayoutLazyRouteChildren: AuthenticatedLayoutLazyRouteChildren =
   {
     AuthenticatedLayoutBrowseIndexLazyRoute:
       AuthenticatedLayoutBrowseIndexLazyRoute,
+    AuthenticatedLayoutSettingsIndexLazyRoute:
+      AuthenticatedLayoutSettingsIndexLazyRoute,
   }
 
 const AuthenticatedLayoutLazyRouteWithChildren =
@@ -114,6 +138,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthenticatedLayoutLazyRouteWithChildren
   '/signin': typeof SigninIndexLazyRoute
   '/browse': typeof AuthenticatedLayoutBrowseIndexLazyRoute
+  '/settings': typeof AuthenticatedLayoutSettingsIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -121,6 +146,7 @@ export interface FileRoutesByTo {
   '': typeof AuthenticatedLayoutLazyRouteWithChildren
   '/signin': typeof SigninIndexLazyRoute
   '/browse': typeof AuthenticatedLayoutBrowseIndexLazyRoute
+  '/settings': typeof AuthenticatedLayoutSettingsIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -129,19 +155,21 @@ export interface FileRoutesById {
   '/_authenticated-layout': typeof AuthenticatedLayoutLazyRouteWithChildren
   '/signin/': typeof SigninIndexLazyRoute
   '/_authenticated-layout/browse/': typeof AuthenticatedLayoutBrowseIndexLazyRoute
+  '/_authenticated-layout/settings/': typeof AuthenticatedLayoutSettingsIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/signin' | '/browse'
+  fullPaths: '/' | '' | '/signin' | '/browse' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/signin' | '/browse'
+  to: '/' | '' | '/signin' | '/browse' | '/settings'
   id:
     | '__root__'
     | '/'
     | '/_authenticated-layout'
     | '/signin/'
     | '/_authenticated-layout/browse/'
+    | '/_authenticated-layout/settings/'
   fileRoutesById: FileRoutesById
 }
 
@@ -178,7 +206,8 @@ export const routeTree = rootRoute
     "/_authenticated-layout": {
       "filePath": "_authenticated-layout.lazy.tsx",
       "children": [
-        "/_authenticated-layout/browse/"
+        "/_authenticated-layout/browse/",
+        "/_authenticated-layout/settings/"
       ]
     },
     "/signin/": {
@@ -186,6 +215,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated-layout/browse/": {
       "filePath": "_authenticated-layout/browse/index.lazy.tsx",
+      "parent": "/_authenticated-layout"
+    },
+    "/_authenticated-layout/settings/": {
+      "filePath": "_authenticated-layout/settings/index.lazy.tsx",
       "parent": "/_authenticated-layout"
     }
   }

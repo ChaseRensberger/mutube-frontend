@@ -11,7 +11,6 @@ export const BackgroundBeamsWithCollision = ({
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const parentRef = useRef<HTMLDivElement>(null);
-
 	const beams = [
 		{
 			initialX: 10,
@@ -122,8 +121,8 @@ export const BackgroundBeamsWithCollision = ({
 			delay: 3,
 		},
 		{
-			initialX: 1200,
-			translateX: 1200,
+			initialX: 1201,
+			translateX: 1201,
 			duration: 6,
 			repeatDelay: 5,
 			className: "h-10",

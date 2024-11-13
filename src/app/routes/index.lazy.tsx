@@ -1,14 +1,15 @@
-import { createLazyFileRoute, Link } from '@tanstack/react-router'
+import { createLazyFileRoute } from '@tanstack/react-router'
 import { BackgroundBeamsWithCollision } from '@/components/background-beams-with-collision'
-import { Input } from "@/components/ui/input"
-import { MagnifyingGlass } from "@phosphor-icons/react"
-
+// import { Input } from "@/components/ui/input"
+// import { MagnifyingGlass } from "@phosphor-icons/react"
+import { useAuth0 } from '@auth0/auth0-react'
+import { Button } from '@/components/ui/button'
 export const Route = createLazyFileRoute('/')({
 	component: Hero,
 })
 
 export default function Hero() {
-
+	const { loginWithRedirect } = useAuth0()
 	return (
 		<div className="bg-white">
 			<header className="absolute inset-x-0 top-0 z-50">
@@ -20,9 +21,9 @@ export default function Hero() {
 						</a>
 					</div>
 					<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-						<Link to="/signin" className="text-sm/6 font-semibold text-gray-900">
+						<Button className="text-sm/6 font-semibold" onClick={() => loginWithRedirect()}>
 							Sign in <span aria-hidden="true">&rarr;</span>
-						</Link>
+						</Button>
 					</div>
 				</nav>
 			</header>
@@ -31,10 +32,10 @@ export default function Hero() {
 					<h1 className="text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
 						µ-<span className='text-red-500'>tube</span>
 					</h1>
-					<div className="relative w-[30rem]">
+					{/* <div className="relative w-[30rem]">
 						<Input placeholder='Search' className='rounded-xl hover:rounded-sm pl-10' />
 						<MagnifyingGlass size={24} className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500" />
-					</div>
+					</div> */}
 					{/*
 							<p className="mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
 								State of the art tooling for ideation, analytics, and more...
