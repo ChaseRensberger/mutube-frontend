@@ -5,7 +5,11 @@ import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), TanStackRouterVite()],
+  plugins: [react(), TanStackRouterVite({
+      routesDirectory: "./src/app/routes",
+      generatedRouteTree: "./src/app/routeTree.gen.ts",
+    }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
