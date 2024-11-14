@@ -14,6 +14,8 @@ function RootLayout() {
       authorizationParams={{
         redirect_uri: `${window.location.origin}/browse`,
       }}
+      cacheLocation="localstorage"
+      useRefreshTokens={true}
     >
       <Outlet />
       {/* <TanStackRouterDevtools /> */}

@@ -10,12 +10,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Auth0ContextInterface, useAuth0, type User } from "@auth0/auth0-react";
 
 export const Route = createLazyFileRoute("/_authenticated-layout/settings/")({
   component: Settings,
 });
 
 function Settings() {
+  const { user }: Auth0ContextInterface<User> = useAuth0();
   return (
     <main>
       <div className="divide-y">
@@ -31,7 +33,7 @@ function Settings() {
             <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
               <div className="col-span-full flex items-center gap-x-8">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
+                  <AvatarImage src={user?.picture} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <div>
@@ -50,6 +52,7 @@ function Settings() {
                   type="text"
                   autoComplete="given-name"
                   className="mt-2"
+                  value={user?.nickname}
                 />
               </div>
 
@@ -72,38 +75,8 @@ function Settings() {
                   type="email"
                   autoComplete="email"
                   className="mt-2"
+                  value={user?.name}
                 />
-              </div>
-
-              <div className="col-span-full">
-                <Label htmlFor="username">Username</Label>
-                <div className="mt-2 flex rounded-md">
-                  <span className="flex select-none items-center pl-3 text-gray-500 text-sm">
-                    example.com/
-                  </span>
-                  <Input
-                    id="username"
-                    name="username"
-                    type="text"
-                    placeholder="janesmith"
-                    autoComplete="username"
-                    className="rounded-l-none"
-                  />
-                </div>
-              </div>
-
-              <div className="col-span-full">
-                <Label htmlFor="timezone">Timezone</Label>
-                <Select>
-                  <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="Select timezone" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pst">Pacific Standard Time</SelectItem>
-                    <SelectItem value="est">Eastern Standard Time</SelectItem>
-                    <SelectItem value="gmt">Greenwich Mean Time</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
             </div>
 
@@ -159,35 +132,6 @@ function Settings() {
 
             <div className="mt-8">
               <Button type="submit">Save</Button>
-            </div>
-          </form>
-        </div>
-
-        <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
-          <div>
-            <h2 className="text-lg font-semibold">Log out other sessions</h2>
-            <p className="mt-1 text-sm text-gray-500">
-              Please enter your password to confirm you would like to log out of
-              your other sessions across all of your devices.
-            </p>
-          </div>
-
-          <form className="md:col-span-2">
-            <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
-              <div className="col-span-full">
-                <Label htmlFor="logout-password">Your password</Label>
-                <Input
-                  id="logout-password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  className="mt-2"
-                />
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <Button type="submit">Log out other sessions</Button>
             </div>
           </form>
         </div>

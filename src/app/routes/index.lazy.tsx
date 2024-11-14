@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute("/")({
 });
 
 export default function Hero() {
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
   const navigate = useNavigate();
   useEffect(() => {
     if (isAuthenticated && !isLoading) {
