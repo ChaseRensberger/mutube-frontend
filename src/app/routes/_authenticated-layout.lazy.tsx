@@ -9,6 +9,7 @@ import {
   Atom,
   SlidersHorizontal,
   SignOut,
+  ListBullets,
 } from "@phosphor-icons/react";
 import {
   Sidebar,
@@ -42,6 +43,11 @@ const SidebarRoutes = [
     title: "Settings",
     url: "/settings",
     icon: SlidersHorizontal,
+  },
+  {
+    title: "Tracked",
+    url: "/tracked",
+    icon: ListBullets,
   },
 ];
 

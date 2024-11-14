@@ -21,6 +21,9 @@ const AuthenticatedLayoutLazyImport = createFileRoute(
 )()
 const IndexLazyImport = createFileRoute('/')()
 const SigninIndexLazyImport = createFileRoute('/signin/')()
+const AuthenticatedLayoutTrackedIndexLazyImport = createFileRoute(
+  '/_authenticated-layout/tracked/',
+)()
 const AuthenticatedLayoutSettingsIndexLazyImport = createFileRoute(
   '/_authenticated-layout/settings/',
 )()
@@ -51,6 +54,17 @@ const SigninIndexLazyRoute = SigninIndexLazyImport.update({
   path: '/signin/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/signin/index.lazy').then((d) => d.Route))
+
+const AuthenticatedLayoutTrackedIndexLazyRoute =
+  AuthenticatedLayoutTrackedIndexLazyImport.update({
+    id: '/tracked/',
+    path: '/tracked/',
+    getParentRoute: () => AuthenticatedLayoutLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated-layout/tracked/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthenticatedLayoutSettingsIndexLazyRoute =
   AuthenticatedLayoutSettingsIndexLazyImport.update({
@@ -131,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLayoutSettingsIndexLazyImport
       parentRoute: typeof AuthenticatedLayoutLazyImport
     }
+    '/_authenticated-layout/tracked/': {
+      id: '/_authenticated-layout/tracked/'
+      path: '/tracked'
+      fullPath: '/tracked'
+      preLoaderRoute: typeof AuthenticatedLayoutTrackedIndexLazyImport
+      parentRoute: typeof AuthenticatedLayoutLazyImport
+    }
   }
 }
 
@@ -140,6 +161,7 @@ interface AuthenticatedLayoutLazyRouteChildren {
   AuthenticatedLayoutBrowseIndexLazyRoute: typeof AuthenticatedLayoutBrowseIndexLazyRoute
   AuthenticatedLayoutComposerIndexLazyRoute: typeof AuthenticatedLayoutComposerIndexLazyRoute
   AuthenticatedLayoutSettingsIndexLazyRoute: typeof AuthenticatedLayoutSettingsIndexLazyRoute
+  AuthenticatedLayoutTrackedIndexLazyRoute: typeof AuthenticatedLayoutTrackedIndexLazyRoute
 }
 
 const AuthenticatedLayoutLazyRouteChildren: AuthenticatedLayoutLazyRouteChildren =
@@ -150,6 +172,8 @@ const AuthenticatedLayoutLazyRouteChildren: AuthenticatedLayoutLazyRouteChildren
       AuthenticatedLayoutComposerIndexLazyRoute,
     AuthenticatedLayoutSettingsIndexLazyRoute:
       AuthenticatedLayoutSettingsIndexLazyRoute,
+    AuthenticatedLayoutTrackedIndexLazyRoute:
+      AuthenticatedLayoutTrackedIndexLazyRoute,
   }
 
 const AuthenticatedLayoutLazyRouteWithChildren =
@@ -164,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/browse': typeof AuthenticatedLayoutBrowseIndexLazyRoute
   '/composer': typeof AuthenticatedLayoutComposerIndexLazyRoute
   '/settings': typeof AuthenticatedLayoutSettingsIndexLazyRoute
+  '/tracked': typeof AuthenticatedLayoutTrackedIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -173,6 +198,7 @@ export interface FileRoutesByTo {
   '/browse': typeof AuthenticatedLayoutBrowseIndexLazyRoute
   '/composer': typeof AuthenticatedLayoutComposerIndexLazyRoute
   '/settings': typeof AuthenticatedLayoutSettingsIndexLazyRoute
+  '/tracked': typeof AuthenticatedLayoutTrackedIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -183,13 +209,21 @@ export interface FileRoutesById {
   '/_authenticated-layout/browse/': typeof AuthenticatedLayoutBrowseIndexLazyRoute
   '/_authenticated-layout/composer/': typeof AuthenticatedLayoutComposerIndexLazyRoute
   '/_authenticated-layout/settings/': typeof AuthenticatedLayoutSettingsIndexLazyRoute
+  '/_authenticated-layout/tracked/': typeof AuthenticatedLayoutTrackedIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/signin' | '/browse' | '/composer' | '/settings'
+  fullPaths:
+    | '/'
+    | ''
+    | '/signin'
+    | '/browse'
+    | '/composer'
+    | '/settings'
+    | '/tracked'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/signin' | '/browse' | '/composer' | '/settings'
+  to: '/' | '' | '/signin' | '/browse' | '/composer' | '/settings' | '/tracked'
   id:
     | '__root__'
     | '/'
@@ -198,6 +232,7 @@ export interface FileRouteTypes {
     | '/_authenticated-layout/browse/'
     | '/_authenticated-layout/composer/'
     | '/_authenticated-layout/settings/'
+    | '/_authenticated-layout/tracked/'
   fileRoutesById: FileRoutesById
 }
 
@@ -236,7 +271,8 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated-layout/browse/",
         "/_authenticated-layout/composer/",
-        "/_authenticated-layout/settings/"
+        "/_authenticated-layout/settings/",
+        "/_authenticated-layout/tracked/"
       ]
     },
     "/signin/": {
@@ -252,6 +288,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated-layout/settings/": {
       "filePath": "_authenticated-layout/settings/index.lazy.tsx",
+      "parent": "/_authenticated-layout"
+    },
+    "/_authenticated-layout/tracked/": {
+      "filePath": "_authenticated-layout/tracked/index.lazy.tsx",
       "parent": "/_authenticated-layout"
     }
   }
