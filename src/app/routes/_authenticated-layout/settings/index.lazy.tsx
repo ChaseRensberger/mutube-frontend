@@ -10,14 +10,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Auth0ContextInterface, useAuth0, type User } from "@auth0/auth0-react";
 
 export const Route = createLazyFileRoute("/_authenticated-layout/settings/")({
   component: Settings,
 });
 
 function Settings() {
-  const { user }: Auth0ContextInterface<User> = useAuth0();
   return (
     <main>
       <div className="divide-y">
@@ -33,7 +31,7 @@ function Settings() {
             <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
               <div className="col-span-full flex items-center gap-x-8">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src={user?.picture} />
+                  <AvatarImage src="" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <div>
@@ -52,7 +50,7 @@ function Settings() {
                   type="text"
                   autoComplete="given-name"
                   className="mt-2"
-                  value={user?.nickname}
+                  value=""
                 />
               </div>
 
@@ -75,7 +73,7 @@ function Settings() {
                   type="email"
                   autoComplete="email"
                   className="mt-2"
-                  value={user?.name}
+                  value=""
                 />
               </div>
             </div>

@@ -1,22 +1,13 @@
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { BackgroundBeamsWithCollision } from "@/components/background-beams-with-collision";
 // import { Input } from "@/components/ui/input"
 // import { MagnifyingGlass } from "@phosphor-icons/react"
-import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
 export const Route = createLazyFileRoute("/")({
   component: Hero,
 });
 
 export default function Hero() {
-  const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (isAuthenticated && !isLoading) {
-      navigate({ to: "/browse" });
-    }
-  }, [isAuthenticated, isLoading, navigate]);
   return (
     <div className="bg-white">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -31,10 +22,7 @@ export default function Hero() {
             </a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <Button
-              className="text-sm/6 font-semibold"
-              onClick={() => loginWithRedirect()}
-            >
+            <Button className="text-sm/6 font-semibold">
               Sign in <span aria-hidden="true">&rarr;</span>
             </Button>
           </div>

@@ -1,9 +1,4 @@
-import {
-  createLazyFileRoute,
-  Outlet,
-  Link,
-  useNavigate,
-} from "@tanstack/react-router";
+import { createLazyFileRoute, Outlet, Link } from "@tanstack/react-router";
 import {
   YoutubeLogo,
   Atom,
@@ -23,7 +18,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useAuth0 } from "@auth0/auth0-react";
 export const Route = createLazyFileRoute("/_authenticated-layout")({
   component: AuthenticatedLayout,
 });
@@ -51,17 +45,7 @@ const SidebarRoutes = [
   },
 ];
 
-import { useEffect } from "react";
-
 function AuthenticatedLayout() {
-  const { logout, isAuthenticated, isLoading } = useAuth0();
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!isAuthenticated && !isLoading) {
-      navigate({ to: "/" });
-    }
-  }, [isAuthenticated, isLoading, navigate]);
-
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
@@ -79,7 +63,7 @@ function AuthenticatedLayout() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              <SidebarMenuButton onClick={() => logout()}>
+              <SidebarMenuButton>
                 <SignOut size={24} />
                 <span>Sign out</span>
               </SidebarMenuButton>
